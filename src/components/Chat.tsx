@@ -66,7 +66,7 @@ export default function Chat() {
       // Response from the API goes into the system object
       setMessages((prev) => [
         ...prev, 
-        { role: 'system', message: response.message }
+        { role: 'assistant', message: response.message }
       ]);
     } catch (error) {
       console.error('Failed to send message:', error);
