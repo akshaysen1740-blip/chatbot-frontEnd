@@ -1,17 +1,28 @@
 import type { ChatMessage, ChatResponse } from '../types/chat';
 
-const API_URL = 'http://localhost:4000/chat';
+const API_URL = import.meta.env.VITE_CHAT_API_URL as string;
+const API_KEY = import.meta.env.VITE_CHAT_API_KEY as string;
+
+if (!API_URL) {
+  throw new Error('VITE_CHAT_API_URL is not defined in environment variables.');
+}
 
 /**
  * Sends the conversation history to the chatbot API endpoint.
  * Throws an error if the request fails or is offline.
  */
 export async function sendChatMessage(messages: ChatMessage[]): Promise<ChatMessage> {
-  const response = await fetch(API_URL, {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (API_KEY) {
+    headers.Authorization = `Bearer ${API_KEY}`;
+  }
+
+  const response = await fetch(`${API_URL}/chat`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({ messages }),
   });
 
