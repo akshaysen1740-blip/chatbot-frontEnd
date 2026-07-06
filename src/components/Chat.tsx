@@ -73,7 +73,7 @@ export default function Chat() {
       // If the API call fails or there is no response, add the error response in the system object
       setMessages((prev) => [
         ...prev,
-        { role: 'system', message: '⚠️ Error: Failed to get response from server. Please make sure the API is running at http://localhost:4000.' }
+        { role: 'system', message: '⚠️ Error: Failed to get response from server. Please make sure the API is running .' }
       ]);
     } finally {
       setIsLoading(false);
