@@ -30,11 +30,23 @@ export async function sendChatMessage(messages: ChatMessage[]): Promise<ChatMess
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  const data: ChatResponse = await response.json();
+  const responseData: ChatResponse = await response.json();
   
-  // Parse response message content from the API's nested object format
-  const messageText = data.message?.content || '';
-  const role = (data.message?.role || 'system') as 'user' | 'system' | 'assistant';
+  // The API response content contains a JSON-encoded string under data.content
+  const content = responseData.data?.content || '';
+  let messageText = content;
+  
+  try {
+    const parsed = JSON.parse(content);
+    if (parsed && typeof parsed === 'object' && 'message' in parsed) {
+      messageText = parsed.message;
+    }
+  } catch (e) {
+    // If it is not valid JSON, use the raw content as fallback
+    messageText = content;
+  }
+  
+  const role = (responseData.data?.role || 'assistant') as 'user' | 'system' | 'assistant';
 
   return {
     role,

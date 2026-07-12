@@ -8,12 +8,11 @@ export interface ChatRequest {
 }
 
 export interface ChatResponse {
-  index?: number;
-  logprobs?: null | any;
-  finish_reason?: string;
-  native_finish_reason?: string;
-  message?: {
-    role?: string;
+  statusCode: number;
+  status: string;
+  message: string;
+  data?: {
+    role?: 'user' | 'system' | 'assistant';
     content?: string;
   };
 }
